@@ -1,0 +1,62 @@
+set -x PATH /Users/ericklaus/Library/Python/3.7/bin /usr/local/opt/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin
+
+set -x GOPATH /Users/ericklaus/go
+set -x PATH $PATH "/Users/ericklaus/.cargo/bin"
+set -x PATH $PATH "/Users/ericklaus/.pub-cache/bin"
+set -x PATH $PATH $HOME/go/bin
+set -x PATH $PATH "/usr/local/opt/python@2/bin"
+set -x PATH $PATH "/Users/ericklaus/bin"
+
+# variables useful on most machines
+set -x EDITOR subl
+set -x SHELL /usr/local/bin/fish
+# TODO: move these to profile specific variables
+set -x GITHUB_USER "ericklaus-wf"
+set -x GITHUB_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
+set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
+
+set -x fish_git_dirty_color red
+
+{{if eq .chezmoi.hostname "WF14990" }}
+# variables needed at workiva
+set -x KUBECONFIG "/Users/ericklaus/.kube/config:/Users/ericklaus/workspaces/wk/EKS/kubeconfigs.yaml"
+
+set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
+set -x ANT_OPTS "-Xms512m -Xmx1024m"
+set -x FLEX_HOME "/Users/ericklaus/workspaces/wf/support/flex_sdks/4.5.1A"
+set -x M2_HOME "/usr/local/opt/maven30/libexec"
+
+set -x ARTIFACTORY_USER "ericklaus-wf"
+set -x ARTIFACTORY_PASS "{{ (onepassword "mzjb7u5hjjd63bg4ssog7fyyqe").details.password }}"
+
+set -x ARTIFACTORY_PRO_USER "eric.klaus@workiva.com"
+set -x ARTIFACTORY_PRO_PASS "{{ (onepassword "vp7l6vnqknazvah6uomr42ufe4").details.password }}"
+
+set -x GOPRIVATE github.com/Workiva
+#set -x GOPROXY "https://$ARTIFACTORY_PRO_USER:$ARTIFACTORY_PRO_PASS@workivaeast.jfrog.io/workivaeast/api/go/go-prod,direct"
+
+set -x SRC_ENDPOINT "https://sourcegraph.wk-dev.wdesk.org"
+set -x SRC_ACCESS_TOKEN "{{ (onepassword "cd4htarfzffaxho62tlidew4kq").details.password }}"
+{{end }}
+
+# set up for Fisher, Fish's package manager
+set -x fisher_path "$HOME/.config/fisher"
+set fish_function_path $fish_function_path[1] $fisher_path/functions $fish_function_path[2..-1]
+set fish_complete_path $fish_complete_path[1] $fisher_path/completions $fish_complete_path[2..-1]
+for file in $fisher_path/conf.d/*.fish
+    source $file
+end
+
+function gofmtall -d "Formats all Go files below this directory"
+	fd -E vendor -e go | xargs -P 4 gofmt -w
+end
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+direnv hook fish | source
+
+# set -gx GOPATH $HOME/go; set -gx GOROOT $HOME/.go; set -gx PATH $GOPATH/bin $PATH; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
+source /usr/local/opt/asdf/asdf.fish
+
+starship init fish | source

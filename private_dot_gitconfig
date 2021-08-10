@@ -1,0 +1,54 @@
+[user]
+	name = Eric Klaus
+	email = eric.klaus@workiva.com
+
+[includeIf "gitdir:~/workspaces/eric/"]
+	path = ~/workspaces/eric/.gitconfig
+
+[core]
+	excludesfile = /Users/ericklaus/.gitignore_global
+	editor = subl -n -w
+	autocrlf = input
+
+[alias]
+	plog = log --first-parent
+	mergeup = merge upstream/master --ff-only
+	dt = difftool --dir-diff
+	repr = rebase -i @{r}
+
+[push]
+	default = current
+
+[rerere]
+	enabled = true
+
+[diff]
+	tool = bcomp
+[difftool]
+	prompt = false
+[difftool "bcomp"]
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+[merge]
+    tool = bcomp
+    renamelimit = 4000
+[mergetool]
+    prompt = false
+	keepBackup = false
+[mergetool "bcomp"]
+    trustExitCode = true
+    cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[rebase]
+	autosquash = true
+
+[url "git@github.com:"]
+    insteadOf = https://github.com
+
+[init]
+	defaultBranch = main
