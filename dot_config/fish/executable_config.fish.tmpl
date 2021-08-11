@@ -1,4 +1,3 @@
-{{- /* -*- mode: fish; -*- */ -}}
 set -x PATH /Users/ericklaus/Library/Python/3.7/bin /usr/local/opt/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin
 
 set -x GOPATH /Users/ericklaus/go
@@ -11,7 +10,7 @@ set -x PATH $PATH "/Users/ericklaus/bin"
 # variables useful on most machines
 set -x EDITOR subl
 set -x SHELL /usr/local/bin/fish
-# TODO: move these to profile specific variables
+# TODO: move these to profile specific variables so this file works for Workiva or personal
 set -x GITHUB_USER "ericklaus-wf"
 set -x GITHUB_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
 set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
