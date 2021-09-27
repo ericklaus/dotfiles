@@ -6,6 +6,7 @@ set -x PATH $PATH "/Users/ericklaus/.pub-cache/bin"
 set -x PATH $PATH $HOME/go/bin
 set -x PATH $PATH "/usr/local/opt/python@2/bin"
 set -x PATH $PATH "/Users/ericklaus/bin"
+set -x PATH $PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 
 # variables useful on most machines
 set -x EDITOR subl
@@ -15,9 +16,11 @@ set -x GITHUB_USER "ericklaus-wf"
 set -x GITHUB_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
 set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepassword "dw5jh5ml75bwhdscurp7is7gkm").details.password }}"
 
+set -x DOCKER_CONFIG "/Users/ericklaus/.wk/config/docker"
+
 set -x fish_git_dirty_color red
 
-{{if eq .chezmoi.hostname "WF14990" }}
+{{if eq .chezmoi.hostname "WF18709" }}
 # variables needed at workiva
 set -x KUBECONFIG "/Users/ericklaus/.kube/config:/Users/ericklaus/workspaces/wk/EKS/kubeconfigs.yaml"
 
@@ -53,10 +56,8 @@ end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-direnv hook fish | source
-
 # set -gx GOPATH $HOME/go; set -gx GOROOT $HOME/.go; set -gx PATH $GOPATH/bin $PATH; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
 source /usr/local/opt/asdf/asdf.fish
-
+asdf exec direnv hook fish | source
 starship init fish | source
