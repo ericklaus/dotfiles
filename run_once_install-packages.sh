@@ -1,6 +1,6 @@
 #!/bin/sh
 
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+command -v brew >/dev/null || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 command -v op >/dev/null || brew install --cask 1password/tap/1password-cli
 command -v fish >/dev/null || brew install fish
