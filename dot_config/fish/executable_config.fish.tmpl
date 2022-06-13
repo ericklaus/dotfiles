@@ -20,7 +20,7 @@ set -x DOCKER_CONFIG "/Users/ericklaus/.wk/config/docker"
 
 set -x fish_git_dirty_color red
 
-{{if eq .chezmoi.hostname "WF18709" }}
+{{ if .work_device -}}
 # variables needed at workiva
 set -x KUBECONFIG "/Users/ericklaus/.kube/config:/Users/ericklaus/workspaces/wk/EKS/kubeconfigs.yaml"
 
