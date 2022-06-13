@@ -26,8 +26,6 @@ set -x KUBECONFIG "/Users/ericklaus/.kube/config:/Users/ericklaus/workspaces/wk/
 
 set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
 set -x ANT_OPTS "-Xms512m -Xmx1024m"
-set -x FLEX_HOME "/Users/ericklaus/workspaces/wf/support/flex_sdks/4.5.1A"
-set -x M2_HOME "/usr/local/opt/maven30/libexec"
 
 set -x ARTIFACTORY_USER "ericklaus-wf"
 set -x ARTIFACTORY_PASS "{{ (onepassword "mzjb7u5hjjd63bg4ssog7fyyqe").details.password }}"
@@ -58,8 +56,6 @@ function gofmtall -d "Formats all Go files below this directory"
 end
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
-# set -gx GOPATH $HOME/go; set -gx GOROOT $HOME/.go; set -gx PATH $GOPATH/bin $PATH; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
 source "$(brew --prefix asdf)/libexec/asdf.fish"
 asdf exec direnv hook fish | source
