@@ -36,7 +36,7 @@ set -x ARTIFACTORY_PRO_PASS "{{ (onepassword "vp7l6vnqknazvah6uomr42ufe4").detai
 set -x GOPRIVATE github.com/Workiva
 #set -x GOPROXY "https://$ARTIFACTORY_PRO_USER:$ARTIFACTORY_PRO_PASS@workivaeast.jfrog.io/workivaeast/api/go/go-prod,direct"
 
-set -x SRC_ENDPOINT "https://sourcegraph.wk-dev.wdesk.org"
+set -x SRC_ENDPOINT "https://sourcegraph.plat.workiva.net"
 set -x SRC_ACCESS_TOKEN "{{ (onepassword "cd4htarfzffaxho62tlidew4kq").details.password }}"
 
 # Python / Pip Credentials: https://pip.pypa.io/en/stable/user_guide/#environment-variables
