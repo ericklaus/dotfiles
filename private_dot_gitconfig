@@ -32,6 +32,13 @@
 [merge]
     tool = bcomp
     renamelimit = 4000
+[merge "go-sum"]
+	name = "Merges two Go go.sum files"
+	driver = sh -c "TEMP=$(mktemp) && sort -um --output ${TEMP} %A %B && mv ${TEMP} %A"
+#[merge "go-vendor-modules-txt"]
+#	name = "Fixes conflicted vendor/modules.txt by regenerating"
+#	driver = "bash /Users/ericklaus/scripts/updatevendor.bash"
+#	driver = "bash -c 'go mod vendor; ./scripts/prune_vendor.sh'"
 [mergetool]
     prompt = false
 	keepBackup = false
