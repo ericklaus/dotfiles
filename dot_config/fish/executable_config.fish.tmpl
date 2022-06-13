@@ -58,6 +58,6 @@ test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shel
 
 # set -gx GOPATH $HOME/go; set -gx GOROOT $HOME/.go; set -gx PATH $GOPATH/bin $PATH; # g-install: do NOT edit, see https://github.com/stefanmaric/g
 
-source /usr/local/opt/asdf/asdf.fish
+source "$(brew --prefix asdf)/libexec/asdf.fish"
 asdf exec direnv hook fish | source
 starship init fish | source
