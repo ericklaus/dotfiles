@@ -40,6 +40,9 @@ set -x GOPRIVATE github.com/Workiva
 
 set -x SRC_ENDPOINT "https://sourcegraph.wk-dev.wdesk.org"
 set -x SRC_ACCESS_TOKEN "{{ (onepassword "cd4htarfzffaxho62tlidew4kq").details.password }}"
+
+# Python / Pip Credentials: https://pip.pypa.io/en/stable/user_guide/#environment-variables
+set -x PIP_CONFIG_FILE /Users/ericklaus/.wk/config/pip.toml
 {{end }}
 
 # set up for Fisher, Fish's package manager
