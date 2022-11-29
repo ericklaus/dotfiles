@@ -16,6 +16,14 @@ set -x PATH $PATH "/Users/ericklaus/bin"
 set -x PATH $PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 set -x PATH $PATH "/Users/ericklaus/.wk/bin"
 
+# set up for Fisher, Fish's package manager
+set -x fisher_path "$HOME/.config/fisher"
+set fish_function_path $fish_function_path[1] $fisher_path/functions $fish_function_path[2..-1]
+set fish_complete_path $fish_complete_path[1] $fisher_path/completions $fish_complete_path[2..-1]
+for file in $fisher_path/conf.d/*.fish
+    source $file
+end
+
 # variables useful on most machines
 set -x EDITOR emacsclient -nw 
 # TODO: move these to profile specific variables so this file works for Workiva or personal
@@ -32,29 +40,12 @@ set -x fish_git_dirty_color red
 set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
 set -x ANT_OPTS "-Xms512m -Xmx1024m"
 
-set -x ARTIFACTORY_USER "ericklaus-wf"
-set -x ARTIFACTORY_PASS "{{ (onepasswordDetailsFields "mzjb7u5hjjd63bg4ssog7fyyqe").password.value }}"
-
-set -x ARTIFACTORY_PRO_USER "eric.klaus@workiva.com"
-set -x ARTIFACTORY_PRO_PASS "{{ (onepasswordDetailsFields "vp7l6vnqknazvah6uomr42ufe4").password.value }}"
-
-set -x GOPRIVATE github.com/Workiva
-#set -x GOPROXY "https://$ARTIFACTORY_PRO_USER:$ARTIFACTORY_PRO_PASS@workivaeast.jfrog.io/workivaeast/api/go/go-prod,direct"
+replay $HOME/.wk/profile
 
 set -x SRC_ENDPOINT "https://sourcegraph.plat.workiva.net"
 set -x SRC_ACCESS_TOKEN "{{ (onepasswordDetailsFields "cd4htarfzffaxho62tlidew4kq").password.value }}"
 
-# Python / Pip Credentials: https://pip.pypa.io/en/stable/user_guide/#environment-variables
-set -x PIP_CONFIG_FILE /Users/ericklaus/.wk/config/pip.toml
 {{end }}
-
-# set up for Fisher, Fish's package manager
-set -x fisher_path "$HOME/.config/fisher"
-set fish_function_path $fish_function_path[1] $fisher_path/functions $fish_function_path[2..-1]
-set fish_complete_path $fish_complete_path[1] $fisher_path/completions $fish_complete_path[2..-1]
-for file in $fisher_path/conf.d/*.fish
-    source $file
-end
 
 function gofmtall -d "Formats all Go files below this directory"
 	fd -E vendor -e go | xargs -P 4 gofmt -w
