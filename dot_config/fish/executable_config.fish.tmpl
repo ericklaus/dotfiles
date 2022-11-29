@@ -9,8 +9,7 @@ set -x PATH $PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 set -x PATH $PATH "/Users/ericklaus/.wk/bin"
 
 # variables useful on most machines
-set -x EDITOR subl --wait
-set -x SHELL /usr/local/bin/fish
+set -x EDITOR emacsclient -nw 
 # TODO: move these to profile specific variables so this file works for Workiva or personal
 set -x GITHUB_USER "ericklaus-wf"
 set -x GITHUB_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
@@ -22,8 +21,6 @@ set -x fish_git_dirty_color red
 
 {{ if .work_device -}}
 # variables needed at workiva
-set -x KUBECONFIG "/Users/ericklaus/.kube/config:/Users/ericklaus/workspaces/wk/EKS/kubeconfigs.yaml"
-
 set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
 set -x ANT_OPTS "-Xms512m -Xmx1024m"
 
@@ -55,6 +52,13 @@ function gofmtall -d "Formats all Go files below this directory"
 	fd -E vendor -e go | xargs -P 4 gofmt -w
 end
 
+function ec --wraps emacsclient --description "Opens an Emacs window in the current terminal"
+  emacsclient -nw $argv
+end
+
+function proxyskaar --description "Connects to the Skaar wk-dev database, making a connection available locally on port 3310"
+  wk proxy --cluster wk-dev --host skaardb-dev-us-east-1-skaardbaurora2cluster-1xfjieyypiivr.cluster-cdsa0kvhqzyp.us-east-1.rds.amazonaws.com --port 3306 --local-port 3310
+end
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 source "$(brew --prefix asdf)/libexec/asdf.fish"
