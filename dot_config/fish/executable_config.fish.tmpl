@@ -40,7 +40,7 @@ set -x fish_git_dirty_color red
 set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
 set -x ANT_OPTS "-Xms512m -Xmx1024m"
 
-replay $HOME/.wk/profile
+replay source $HOME/.wk/profile
 
 set -x SRC_ENDPOINT "https://sourcegraph.plat.workiva.net"
 set -x SRC_ACCESS_TOKEN "{{ (onepasswordDetailsFields "cd4htarfzffaxho62tlidew4kq").password.value }}"
