@@ -36,6 +36,7 @@ set -x ANT_OPTS "-Xms512m -Xmx1024m"
 
 set -x GITHUB_USER "ericklaus-wf"
 set -x GITHUB_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
+set -x GITHUB_PASS "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
 set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
 
 set -x DOCKER_CONFIG "/Users/ericklaus/.wk/config/docker"
@@ -46,6 +47,10 @@ set -x SRC_ENDPOINT "https://sourcegraph.plat.workiva.net"
 set -x SRC_ACCESS_TOKEN "{{ (onepasswordDetailsFields "cd4htarfzffaxho62tlidew4kq").password.value }}"
 
 {{end }}
+
+function git-rm-merged -d "Delete merged branches"
+  git branch --merged | egrep -v "(^\*|master|main)" | xargs -r git branch -d
+end
 
 function gofmtall -d "Formats all Go files below this directory"
 	fd -E vendor -e go | xargs -P 4 gofmt -w
@@ -59,6 +64,9 @@ end
 function proxyskaar --description "Connects to the Skaar wk-dev database, making a connection available locally on port 3310"
   wk proxy --cluster wk-dev --host skaardb-dev-us-east-1-skaardbaurora2cluster-1xfjieyypiivr.cluster-cdsa0kvhqzyp.us-east-1.rds.amazonaws.com --port 3306 --local-port 3310
 end
+
+function proxystreams --description "Connects to the Streams wk-dev database, making a connection available locally on port 3311"
+  wk proxy --cluster wk-dev --host linking-api-cfh-2018-01-d-linkingaurora2dbcluster-1ejl0yb8qgom.cluster-cdsa0kvhqzyp.us-east-1.rds.amazonaws.com --port 3306 --local-port 3311
 {{end }}
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
