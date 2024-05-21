@@ -54,6 +54,9 @@
 [merge "go-sum"]
 	name = "Merges two Go go.sum files"
 	driver = sh -c "TEMP=$(mktemp) && sort -um --output ${TEMP} %A %B && mv ${TEMP} %A"
+[merge "go-mod"]
+	name = "Merges two Go go.mod files"
+	driver = gomerge mod --file-ancestor="%O" --file-current="%A" --file-other="%B" --local-head-name="%X" --other-head-name="%Y" --conflict-placeholder-size="%L" 
 #[merge "go-vendor-modules-txt"]
 #	name = "Fixes conflicted vendor/modules.txt by regenerating"
 #	driver = "bash /Users/ericklaus/scripts/updatevendor.bash"
