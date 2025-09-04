@@ -1,4 +1,5 @@
-set -x PATH /usr/local/opt/python@3.10/bin /usr/local/opt/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin
+set -x PATH /usr/local/opt/python@3.10/bin /usr/local/opt/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin $HOME/.config/emacs/bin
+
 {{ if eq .chezmoi.arch "arm64"}}
 set -gx HOMEBREW_PREFIX "/opt/homebrew";
 set -gx HOMEBREW_CELLAR "/opt/homebrew/Cellar";
@@ -14,7 +15,6 @@ set -x PATH $PATH "/Users/ericklaus/.pub-cache/bin"
 set -x PATH $PATH $HOME/go/bin
 set -x PATH $PATH "/Users/ericklaus/bin"
 set -x PATH $PATH "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
-set -x PATH $PATH "/Users/ericklaus/.wk/bin"
 
 # set up for Fisher, Fish's package manager
 set -x fisher_path "$HOME/.config/fisher"
@@ -26,19 +26,19 @@ end
 
 # variables useful on most machines
 set -x EDITOR emacsclient -nw 
-# TODO: move these to profile specific variables so this file works for Workiva or personal
+set -x fish_git_dirty_color red
+
+{{ if .work_device -}}
+# variables needed at workiva
+set -x PATH $PATH "/Users/ericklaus/.wk/bin"
+set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
+set -x ANT_OPTS "-Xms512m -Xmx1024m"
+
 set -x GITHUB_USER "ericklaus-wf"
 set -x GITHUB_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
 set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
 
 set -x DOCKER_CONFIG "/Users/ericklaus/.wk/config/docker"
-
-set -x fish_git_dirty_color red
-
-{{ if .work_device -}}
-# variables needed at workiva
-set -x MAVEN_OPTS "-Xmx4096m -Xms1024m"
-set -x ANT_OPTS "-Xms512m -Xmx1024m"
 
 replay source $HOME/.wk/profile
 
@@ -55,11 +55,17 @@ function ec --wraps emacsclient --description "Opens an Emacs window in the curr
   emacsclient -nw $argv
 end
 
+{{ if .work_device -}}
 function proxyskaar --description "Connects to the Skaar wk-dev database, making a connection available locally on port 3310"
   wk proxy --cluster wk-dev --host skaardb-dev-us-east-1-skaardbaurora2cluster-1xfjieyypiivr.cluster-cdsa0kvhqzyp.us-east-1.rds.amazonaws.com --port 3306 --local-port 3310
 end
+{{end }}
+
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+{{ if .work_device -}}
 source "$(brew --prefix asdf)/libexec/asdf.fish"
 asdf exec direnv hook fish | source
+{{end }}
+
 starship init fish | source
