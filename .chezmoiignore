@@ -1,2 +1,3 @@
 README.md
 fish_plugins
+iterm2 # this directory is stored here for syncing, but iTerm2 is configured to use it directly from this location; it is not managed by chezmoi
