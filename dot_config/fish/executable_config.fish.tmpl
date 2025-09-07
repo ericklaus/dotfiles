@@ -1,5 +1,4 @@
-set -x PATH /usr/local/opt/python@3.10/bin /usr/local/opt/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin $HOME/.config/emacs/bin
-
+set -x PATH /usr/local/bin/python@3.10/bin /usr/local/python/libexec/bin /usr/local/bin /usr/bin /bin /usr/sbin /usr/local/sbin /sbin $HOME/.config/emacs/bin
 {{ if eq .chezmoi.arch "arm64"}}
 set -gx HOMEBREW_PREFIX "/opt/homebrew";
 set -gx HOMEBREW_CELLAR "/opt/homebrew/Cellar";
@@ -25,7 +24,10 @@ for file in $fisher_path/conf.d/*.fish
 end
 
 # variables useful on most machines
-set -x EDITOR emacsclient -nw 
+set -x EDITOR emacsclient -nw
+if test -e "$HOME/.cargo/env.fish"
+   source "$HOME/.cargo/env.fish"
+end
 set -x fish_git_dirty_color red
 
 {{ if .work_device -}}
@@ -40,10 +42,12 @@ set -x GITHUB_PASS "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").p
 set -x HOMEBREW_GITHUB_API_TOKEN "{{ (onepasswordDetailsFields "dw5jh5ml75bwhdscurp7is7gkm").password.value }}"
 
 set -x DOCKER_CONFIG "/Users/ericklaus/.wk/config/docker"
+set -x SSH_AUTH_SOCK "$HOME/.1password/agent.sock"
+
 
 replay source $HOME/.wk/profile
 
-set -x SRC_ENDPOINT "https://sourcegraph.plat.workiva.net"
+set -x SRC_ENDPOINT "https://workiva.sourcegraphcloud.com"
 set -x SRC_ACCESS_TOKEN "{{ (onepasswordDetailsFields "cd4htarfzffaxho62tlidew4kq").password.value }}"
 
 {{end }}
@@ -72,8 +76,21 @@ function proxystreams --description "Connects to the Streams wk-dev database, ma
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 {{ if .work_device -}}
-source "$(brew --prefix asdf)/libexec/asdf.fish"
-asdf exec direnv hook fish | source
-{{end }}
 
+# ASDF configuration code
+if test -z $ASDF_DATA_DIR
+    set _asdf_shims "$HOME/.asdf/shims"
+else
+    set _asdf_shims "$ASDF_DATA_DIR/shims"
+end
+
+# Do not use fish_add_path (added in Fish 3.2) because it
+# potentially changes the order of items in PATH
+if not contains $_asdf_shims $PATH
+    set -gx --prepend PATH $_asdf_shims
+end
+set --erase _asdf_shims
+# ASDF end
+
+{{end }}
 starship init fish | source

@@ -51,16 +51,12 @@
 [difftool "bcomp"]
 	trustExitCode = true
 	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
-[merge "go-sum"]
+[merge "gomergesum"]
 	name = "Merges two Go go.sum files"
-	driver = sh -c "TEMP=$(mktemp) && sort -um --output ${TEMP} %A %B && mv ${TEMP} %A"
-[merge "go-mod"]
+	driver = gomodmerge sum --file-ancestor="%O" --file-current="%A" --file-other="%B" --local-head-name="%X" --other-head-name="%Y" --conflict-placeholder-size="%L"
+[merge "gomergemod"]
 	name = "Merges two Go go.mod files"
-	driver = gomerge mod --file-ancestor="%O" --file-current="%A" --file-other="%B" --local-head-name="%X" --other-head-name="%Y" --conflict-placeholder-size="%L" 
-#[merge "go-vendor-modules-txt"]
-#	name = "Fixes conflicted vendor/modules.txt by regenerating"
-#	driver = "bash /Users/ericklaus/scripts/updatevendor.bash"
-#	driver = "bash -c 'go mod vendor; ./scripts/prune_vendor.sh'"
+	driver = gomodmerge mod --file-ancestor="%O" --file-current="%A" --file-other="%B" --local-head-name="%X" --other-head-name="%Y" --conflict-placeholder-size="%L" 
 [mergetool]
     prompt = false
 	keepBackup = false
